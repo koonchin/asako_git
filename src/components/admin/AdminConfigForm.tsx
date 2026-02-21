@@ -26,7 +26,7 @@ const AdminConfigForm: React.FC<{ token: string }> = ({ token }) => {
 
   const fetchConfig = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/config');
+      const response = await fetch('import.meta.env.VITE_API_URL/config');
       const data = await response.json();
       setConfig(data);
       setLoading(false);
@@ -39,7 +39,7 @@ const AdminConfigForm: React.FC<{ token: string }> = ({ token }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:5000/api/config', {
+      const response = await fetch('import.meta.env.VITE_API_URL/config', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

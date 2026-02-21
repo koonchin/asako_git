@@ -42,7 +42,7 @@ const AdminProductForm: React.FC<{ token: string }> = ({ token }) => {
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/products', {
+      const response = await fetch('import.meta.env.VITE_API_URL/products', {
         headers: { 'Authorization': `Bearer ${token}` },
       });
       const data = await response.json();
@@ -57,8 +57,8 @@ const AdminProductForm: React.FC<{ token: string }> = ({ token }) => {
     try {
       const method = editingId ? 'PUT' : 'POST';
       const url = editingId
-        ? `http://localhost:5000/api/products/${editingId}`
-        : 'http://localhost:5000/api/products';
+        ? `import.meta.env.VITE_API_URL/products/${editingId}`
+        : 'import.meta.env.VITE_API_URL/products';
 
       const response = await fetch(url, {
         method,
@@ -82,7 +82,7 @@ const AdminProductForm: React.FC<{ token: string }> = ({ token }) => {
   const handleDelete = async (id: number) => {
     if (!confirm('Are you sure?')) return;
     try {
-      await fetch(`http://localhost:5000/api/products/${id}`, {
+      await fetch(`import.meta.env.VITE_API_URL/products/${id}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` },
       });

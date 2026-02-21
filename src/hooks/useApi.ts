@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 
-const API_URL = 'http://localhost:5000/api';
+// เปลี่ยนจาก: const API_URL = 'http://localhost:5000/api';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 export const useApi = <T,>(endpoint: string, token?: string) => {
   const [data, setData] = useState<T | null>(null);

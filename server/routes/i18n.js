@@ -11,19 +11,8 @@ router.get('/texts', async (req, res) => {
       order: [['category', 'ASC'], ['key_path', 'ASC']],
     });
     
-    // Format response as nested object
-    const formatted = {};
-    texts.forEach(text => {
-      const [cat, key] = text.key_path.split('.');
-      if (!formatted[cat]) formatted[cat] = {};
-      formatted[cat][key] = {
-        en: text.en,
-        th: text.th,
-        cn: text.cn,
-      };
-    });
-    
-    res.json(formatted);
+    // ✅ ต้องส่งแบบนี้เท่านั้นเพื่อให้ AdminI18nForm.tsx ทำงานได้
+    res.json(texts); 
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
