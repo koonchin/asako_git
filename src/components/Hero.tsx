@@ -1,10 +1,11 @@
 // components/Hero.tsx
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom'; // ✅ Import useNavigate
 
 const Hero: React.FC = () => {
   const { t } = useTranslation();
-
+  const navigate = useNavigate();
   return (
     <section className="pt-40 pb-20 px-6 overflow-hidden bg-white relative">
       {/* Background Graphic (Abstract) */}
@@ -36,10 +37,14 @@ const Hero: React.FC = () => {
 
           {/* Buttons */}
           <div className="flex flex-wrap gap-4 pt-4">
-            <button className="bg-gray-900 hover:bg-black text-white px-10 py-4 text-s font-bold uppercase tracking-[0.2em] transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1">
+            <button
+            onClick={() => navigate('/inventory')}
+            className="bg-gray-900 hover:bg-black text-white px-10 py-4 text-s font-bold uppercase tracking-[0.2em] transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1">
               {t('hero.view_catalog')}
             </button>
-            <button className="border border-gray-300 hover:border-red-600 hover:text-red-600 text-gray-900 px-10 py-4 text-xs font-bold uppercase tracking-[0.2em] transition-all bg-white">
+            <button 
+            onClick={() => navigate('/about')}
+            className="border border-gray-300 hover:border-red-600 hover:text-red-600 text-gray-900 px-10 py-4 text-xs font-bold uppercase tracking-[0.2em] transition-all bg-white">
               {t('hero.learn_more')}
             </button>
           </div>

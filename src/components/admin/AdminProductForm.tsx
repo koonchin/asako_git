@@ -17,7 +17,8 @@ interface Product {
   is_active: boolean;
 }
 
-const AdminProductForm: React.FC<{ token: string }> = ({ token }) => {
+const AdminProductForm: React.FC<{ token: string, onLogout: () => void }> = ({ token, onLogout }) => {
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
   const [products, setProducts] = useState<Product[]>([]);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [formData, setFormData] = useState<Product>({
@@ -39,17 +40,49 @@ const AdminProductForm: React.FC<{ token: string }> = ({ token }) => {
   useEffect(() => {
     fetchProducts();
   }, []);
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
 
   const fetchProducts = async () => {
     try {
-const response = await fetch(`${API_URL}/products`, {
+      const response = await fetch(`${API_URL}/products`, {
         headers: { 'Authorization': `Bearer ${token}` },
       });
+      if (response.status === 401 || response.status === 403) return onLogout();
       const data = await response.json();
       setProducts(data);
     } catch (error) {
       console.error('Error fetching products:', error);
+    }
+  };
+
+  // ฟังก์ชันอัปโหลดรูปภาพ
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const uploadData = new FormData();
+    uploadData.append('image', file);
+
+    try {
+      const response = await fetch(`${API_URL}/upload`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        body: uploadData,
+      });
+
+      if (response.status === 401 || response.status === 403) return onLogout();
+
+      if (response.ok) {
+        const data = await response.json();
+        // บันทึก path รูปภาพลงใน state formData
+        setFormData({ ...formData, image_url: data.url });
+        alert('Image uploaded successfully!');
+      } else {
+        alert('Failed to upload image.');
+      }
+    } catch (error) {
+      console.error('Error uploading file:', error);
     }
   };
 
@@ -60,6 +93,7 @@ const response = await fetch(`${API_URL}/products`, {
       const url = editingId
         ? `${API_URL}/products/${editingId}`
         : `${API_URL}/products`;
+
       const response = await fetch(url, {
         method,
         headers: {
@@ -69,10 +103,14 @@ const response = await fetch(`${API_URL}/products`, {
         body: JSON.stringify(formData),
       });
 
+      if (response.status === 401 || response.status === 403) return onLogout();
+
       if (response.ok) {
         alert(editingId ? 'Product updated!' : 'Product created!');
         fetchProducts();
         resetForm();
+      } else {
+        alert('Failed to save product');
       }
     } catch (error) {
       console.error('Error saving product:', error);
@@ -80,12 +118,13 @@ const response = await fetch(`${API_URL}/products`, {
   };
 
   const handleDelete = async (id: number) => {
-    if (!confirm('Are you sure?')) return;
+    if (!window.confirm('Are you sure you want to delete this product?')) return;
     try {
-      await fetch(`${API_URL}/products/${id}`, {
+      const response = await fetch(`${API_URL}/products/${id}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` },
       });
+      if (response.status === 401 || response.status === 403) return onLogout();
       fetchProducts();
     } catch (error) {
       console.error('Error deleting product:', error);
@@ -95,6 +134,7 @@ const response = await fetch(`${API_URL}/products`, {
   const handleEdit = (product: Product) => {
     setFormData(product);
     setEditingId(product.id || null);
+    window.scrollTo({ top: 0, behavior: 'smooth' }); // เลื่อนจอขึ้นไปบนสุดเพื่อง่ายต่อการแก้ไข
   };
 
   const resetForm = () => {
@@ -116,128 +156,245 @@ const response = await fetch(`${API_URL}/products`, {
     setEditingId(null);
   };
 
-  return (
+  // ดึง base url มาเพื่อใช้โชว์รูปพรีวิว
+const getFullImageUrl = (url: string) => {
+    if (!url) return '';
+    if (url.startsWith('/uploads/')) {
+      return `${API_URL.replace('/api', '')}${url}`;
+    }
+    return url; // ถ้าเป็น /images/ จะส่งกลับไปตรงๆ ให้ Frontend หาจากโฟลเดอร์ public
+  };
+    return (
     <div className="space-y-8">
-      {/* Form */}
+      {/* Form Section */}
       <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow">
-        <h2 className="text-2xl font-bold mb-6">{editingId ? 'Edit' : 'Add New'} Product</h2>
+        <h2 className="text-2xl font-bold mb-6">{editingId ? 'Edit Product' : 'Add New Product'}</h2>
 
-        <div className="grid grid-cols-3 gap-4 mb-4">
-          <input
-            type="text"
-            placeholder="Name (English)"
-            value={formData.name_en}
-            onChange={(e) => setFormData({ ...formData, name_en: e.target.value })}
-            className="px-4 py-2 border border-gray-300 rounded"
-            required
-          />
-          <input
-            type="text"
-            placeholder="Name (Thai)"
-            value={formData.name_th}
-            onChange={(e) => setFormData({ ...formData, name_th: e.target.value })}
-            className="px-4 py-2 border border-gray-300 rounded"
-          />
-          <input
-            type="text"
-            placeholder="Name (Chinese)"
-            value={formData.name_cn}
-            onChange={(e) => setFormData({ ...formData, name_cn: e.target.value })}
-            className="px-4 py-2 border border-gray-300 rounded"
-          />
+        {/* Name */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+          <div>
+            <label className="block text-xs font-bold text-gray-500 mb-1">Name (EN)</label>
+            <input
+              type="text"
+              value={formData.name_en}
+              onChange={(e) => setFormData({ ...formData, name_en: e.target.value })}
+              className="w-full px-4 py-2 border border-gray-300 rounded"
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-bold text-gray-500 mb-1">Name (TH)</label>
+            <input
+              type="text"
+              value={formData.name_th}
+              onChange={(e) => setFormData({ ...formData, name_th: e.target.value })}
+              className="w-full px-4 py-2 border border-gray-300 rounded"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-bold text-gray-500 mb-1">Name (CN)</label>
+            <input
+              type="text"
+              value={formData.name_cn}
+              onChange={(e) => setFormData({ ...formData, name_cn: e.target.value })}
+              className="w-full px-4 py-2 border border-gray-300 rounded"
+            />
+          </div>
         </div>
 
-        {/* Similar inputs for descriptions, categories, etc */}
-
-        <div className="grid grid-cols-2 gap-4 mb-4">
-          <input
-            type="number"
-            placeholder="Price"
-            value={formData.price}
-            onChange={(e) => setFormData({ ...formData, price: parseFloat(e.target.value) })}
-            className="px-4 py-2 border border-gray-300 rounded"
-          />
-          <input
-            type="text"
-            placeholder="Image URL"
-            value={formData.image_url}
-            onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
-            className="px-4 py-2 border border-gray-300 rounded"
-          />
+        {/* Category */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+          <div>
+            <label className="block text-xs font-bold text-gray-500 mb-1">Category (EN)</label>
+            <input
+              type="text"
+              value={formData.category_en}
+              onChange={(e) => setFormData({ ...formData, category_en: e.target.value })}
+              className="w-full px-4 py-2 border border-gray-300 rounded"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-bold text-gray-500 mb-1">Category (TH)</label>
+            <input
+              type="text"
+              value={formData.category_th}
+              onChange={(e) => setFormData({ ...formData, category_th: e.target.value })}
+              className="w-full px-4 py-2 border border-gray-300 rounded"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-bold text-gray-500 mb-1">Category (CN)</label>
+            <input
+              type="text"
+              value={formData.category_cn}
+              onChange={(e) => setFormData({ ...formData, category_cn: e.target.value })}
+              className="w-full px-4 py-2 border border-gray-300 rounded"
+            />
+          </div>
         </div>
 
-        <div className="flex gap-4 mb-6">
-          <label className="flex items-center gap-2">
+        {/* Description */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+          <div>
+            <label className="block text-xs font-bold text-gray-500 mb-1">Description (EN)</label>
+            <textarea
+              value={formData.description_en}
+              onChange={(e) => setFormData({ ...formData, description_en: e.target.value })}
+              className="w-full px-4 py-2 border border-gray-300 rounded"
+              rows={2}
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-bold text-gray-500 mb-1">Description (TH)</label>
+            <textarea
+              value={formData.description_th}
+              onChange={(e) => setFormData({ ...formData, description_th: e.target.value })}
+              className="w-full px-4 py-2 border border-gray-300 rounded"
+              rows={2}
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-bold text-gray-500 mb-1">Description (CN)</label>
+            <textarea
+              value={formData.description_cn}
+              onChange={(e) => setFormData({ ...formData, description_cn: e.target.value })}
+              className="w-full px-4 py-2 border border-gray-300 rounded"
+              rows={2}
+            />
+          </div>
+        </div>
+
+        {/* Price & Image Upload */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 items-center">
+          <div>
+            <label className="block text-xs font-bold text-gray-500 mb-1">Price</label>
+            <input
+              type="number"
+              value={formData.price}
+              onChange={(e) => setFormData({ ...formData, price: parseFloat(e.target.value) || 0 })}
+              className="w-full px-4 py-2 border border-gray-300 rounded"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-bold text-gray-500 mb-1">Product Image</label>
+            <div className="flex items-center gap-4">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="w-full px-4 py-2 border border-gray-300 rounded bg-gray-50 cursor-pointer"
+              />
+              {formData.image_url && (
+                <img 
+                  src={getFullImageUrl(formData.image_url)} 
+                  alt="Preview" 
+                  className="w-12 h-12 object-cover rounded shadow border"
+                />
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Checkboxes */}
+        <div className="flex gap-6 mb-8 bg-gray-50 p-4 rounded border border-gray-100">
+          <label className="flex items-center gap-2 cursor-pointer">
             <input
               type="checkbox"
               checked={formData.is_featured}
               onChange={(e) => setFormData({ ...formData, is_featured: e.target.checked })}
+              className="w-5 h-5 accent-red-600 cursor-pointer"
             />
-            <span>Featured</span>
+            <span className="font-bold text-gray-700">Featured (แสดงหน้าแรก)</span>
           </label>
-          <label className="flex items-center gap-2">
+          <label className="flex items-center gap-2 cursor-pointer">
             <input
               type="checkbox"
               checked={formData.is_active}
               onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })}
+              className="w-5 h-5 accent-red-600 cursor-pointer"
             />
-            <span>Active</span>
+            <span className="font-bold text-gray-700">Active (เปิดขาย)</span>
           </label>
         </div>
 
+        {/* Action Buttons */}
         <div className="flex gap-4">
-          <button type="submit" className="bg-red-600 text-white px-6 py-2 rounded font-bold">
-            {editingId ? 'Update' : 'Create'} Product
+          <button type="submit" className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded font-bold transition-colors">
+            {editingId ? 'Update Product' : 'Create Product'}
           </button>
           {editingId && (
             <button
               type="button"
               onClick={resetForm}
-              className="bg-gray-400 text-white px-6 py-2 rounded font-bold"
+              className="bg-gray-400 hover:bg-gray-500 text-white px-8 py-3 rounded font-bold transition-colors"
             >
-              Cancel
+              Cancel Edit
             </button>
           )}
         </div>
       </form>
 
-      {/* Products List */}
+      {/* Products Table Section */}
       <div className="bg-white rounded-lg shadow overflow-hidden">
-        <div className="px-8 py-6 border-b border-gray-200">
-          <h2 className="text-2xl font-bold">Products</h2>
+        <div className="px-8 py-6 border-b border-gray-200 flex justify-between items-center bg-gray-50">
+          <h2 className="text-2xl font-black text-gray-800">Product List</h2>
+          <span className="text-gray-500 font-bold">{products.length} Items</span>
         </div>
         <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead className="bg-gray-50 border-b border-gray-200">
+          <table className="w-full text-sm text-left">
+            <thead className="bg-gray-100 border-b border-gray-200">
               <tr>
-                <th className="px-6 py-3 text-left font-bold">Name</th>
-                <th className="px-6 py-3 text-left font-bold">Price</th>
-                <th className="px-6 py-3 text-left font-bold">Category</th>
-                <th className="px-6 py-3 text-center font-bold">Actions</th>
+                <th className="px-6 py-4 font-black text-gray-600">Image</th>
+                <th className="px-6 py-4 font-black text-gray-600">Name (EN)</th>
+                <th className="px-6 py-4 font-black text-gray-600">Price</th>
+                <th className="px-6 py-4 font-black text-gray-600">Category</th>
+                <th className="px-6 py-4 font-black text-gray-600 text-center">Status</th>
+                <th className="px-6 py-4 font-black text-gray-600 text-center">Actions</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="divide-y divide-gray-100">
               {products.map((product) => (
-                <tr key={product.id} className="border-b border-gray-200 hover:bg-gray-50">
-                  <td className="px-6 py-4">{product.name_en}</td>
-                  <td className="px-6 py-4">¥{product.price}</td>
-                  <td className="px-6 py-4">{product.category_en}</td>
-                  <td className="px-6 py-4 text-center space-x-2">
+                <tr key={product.id} className="hover:bg-gray-50 transition-colors">
+                  <td className="px-6 py-3">
+                    <img 
+                      src={getFullImageUrl(product.image_url)} 
+                      alt={product.name_en} 
+                      className="w-10 h-10 object-cover rounded border"
+                    />
+                  </td>
+                  <td className="px-6 py-3 font-bold text-gray-800">{product.name_en}</td>
+                  <td className="px-6 py-3 text-gray-600">฿{Number(product.price).toLocaleString()}</td>
+                  <td className="px-6 py-3 text-gray-600">{product.category_en}</td>
+                  <td className="px-6 py-3 text-center">
+                    {product.is_active ? (
+                      <span className="bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-bold">Active</span>
+                    ) : (
+                      <span className="bg-gray-100 text-gray-500 px-2 py-1 rounded text-xs font-bold">Hidden</span>
+                    )}
+                  </td>
+                  <td className="px-6 py-3 text-center space-x-4">
                     <button
                       onClick={() => handleEdit(product)}
-                      className="text-blue-600 hover:underline"
+                      className="text-blue-600 hover:text-blue-800 font-bold"
                     >
                       Edit
                     </button>
                     <button
                       onClick={() => handleDelete(product.id!)}
-                      className="text-red-600 hover:underline"
+                      className="text-red-600 hover:text-red-800 font-bold"
                     >
                       Delete
                     </button>
                   </td>
                 </tr>
               ))}
+              {products.length === 0 && (
+                <tr>
+                  <td colSpan={6} className="px-6 py-8 text-center text-gray-500">
+                    No products found. Add your first product above.
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>

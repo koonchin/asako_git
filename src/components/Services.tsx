@@ -1,7 +1,6 @@
-// components/Services.tsx
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { SITE_CONFIG, CONTACT_INFO } from '../constants'; // ✅ Import CONTACT_INFO
+import { CONTACT_INFO } from '../constants';
 
 const Services: React.FC = () => {
   const { t } = useTranslation();
@@ -17,52 +16,48 @@ const Services: React.FC = () => {
     { title: t('highlights.item8_t'), desc: t('highlights.item8_d'), icon: <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /> }
   ];
 
+  const renderIcon = (id: string) => {
+    if (id === 'facebook') return <img src="/images/facebook-logo.png" alt="Facebook" className="w-full h-full object-cover" />;    
+    // ✅ เปลี่ยนเป็นใช้รูปภาพสำหรับ Line
+    if (id === 'line') return <img src="/images/line-logo.png" alt="Line" className="w-full h-full object-cover" />;
+    
+    if (id === 'tel') return <svg fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24" className="w-8 h-8"><path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>;
+    if (id === 'map') return <svg viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8"><path d="M12 0C7.58 0 4 3.58 4 8c0 5.25 8 16 8 16s8-10.75 8-16c0-4.42-3.58-8-8-8zm0 11.5c-1.93 0-3.5-1.57-3.5-3.5S10.07 4.5 12 4.5 15.5 6.07 15.5 8 13.93 11.5 12 11.5z"/></svg>;
+    return <svg viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8"><circle cx="12" cy="12" r="10" /></svg>;
+  };
+
   return (
     <>
-      {/* Services Content (Red Background) */}
       <section id="services" className="py-24 px-6 bg-red-700 text-white">
-        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-12 items-center">
-          {/* Left Side: Image and Subtitle */}
-          <div className="lg:w-2/5 space-y-6 text-left shrink-0">
-            <div className="relative group overflow-hidden rounded-xl shadow-2xl">
-              <img 
-                src={SITE_CONFIG.home.promotionMain} // Use config image
-                alt="Thai Asako Highlights" 
-                className="w-full h-[400px] object-cover transition-transform duration-700 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-red-900/60 to-transparent"></div>
-            </div>
-            <div className="space-y-4">
-              <h2 className="text-4xl font-black tracking-tighter text-white uppercase italic">
-                {t('highlights.title')}
-              </h2>
-              <p className="text-xl font-medium leading-relaxed text-white/90 border-l-4 border-white pl-6">
-                {t('highlights.subtitle')}
-              </p>
-            </div>
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16 space-y-4">
+            <h2 className="text-4xl md:text-5xl font-black tracking-tighter text-white uppercase italic">
+              {t('highlights.title')}
+            </h2>
+            <p className="text-lg md:text-xl font-medium text-white/90 max-w-2xl mx-auto">
+              {t('highlights.subtitle')}
+            </p>
+            <div className="w-24 h-1 bg-white mx-auto mt-4"></div>
           </div>
 
-          {/* Right Side: 8 Items with Icons */}
-          <div className="lg:w-3/5 grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full">
             {highlights.map((item, i) => (
               <div 
                 key={i} 
-                className="group p-5 border border-white/20 bg-white/5 backdrop-blur-sm hover:bg-white hover:border-transparent transition-all duration-300 cursor-pointer"
+                className="group p-8 border border-white/20 bg-white/5 backdrop-blur-sm hover:bg-white hover:border-transparent hover:-translate-y-2 transition-all duration-300 cursor-pointer rounded-xl flex flex-col items-center text-center shadow-lg"
               >
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 shrink-0 bg-white text-red-600 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 group-hover:scale-110 group-hover:bg-red-600 group-hover:text-white">
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                      {item.icon}
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="text-md font-black uppercase tracking-tight text-white transition-colors duration-300 group-hover:text-red-700">
-                      {item.title}
-                    </h3>
-                    <p className="text-[10px] uppercase tracking-widest text-white/60 transition-colors duration-300 group-hover:text-red-600/80">
-                      {item.desc}
-                    </p>
-                  </div>
+                <div className="w-16 h-16 shrink-0 bg-white text-red-600 rounded-full flex items-center justify-center shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:bg-red-600 group-hover:text-white mb-6">
+                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                    {item.icon}
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="text-lg font-black uppercase tracking-tight text-white transition-colors duration-300 group-hover:text-red-700">
+                    {item.title}
+                  </h3>
+                  <p className="text-xs uppercase tracking-widest text-white/70 transition-colors duration-300 group-hover:text-red-600/80 mt-3 leading-relaxed">
+                    {item.desc}
+                  </p>
                 </div>
               </div>
             ))}
@@ -70,7 +65,7 @@ const Services: React.FC = () => {
         </div>
       </section>
 
-      {/* ✅ New Contact Section (Contact only, No Owner Bio) */}
+      {/* Contact Section */}
       <section className="py-24 px-6 bg-gray-50 border-t border-gray-200 text-gray-900">
         <div className="max-w-4xl mx-auto text-center space-y-12">
           <div className="space-y-4">
@@ -90,11 +85,10 @@ const Services: React.FC = () => {
                 className="flex flex-col items-center gap-4 p-6 bg-white shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all rounded-lg group"
               >
                 <div 
-                  className="w-16 h-16 rounded-full flex items-center justify-center text-white text-2xl shadow-md"
-                  style={{ backgroundColor: c.color }}
+                  className="w-16 h-16 rounded-full flex items-center justify-center text-white shadow-md group-hover:scale-110 transition-transform overflow-hidden"
+                  style={{ backgroundColor: (c.id === 'line' || c.id === 'facebook') ? 'transparent' : c.color }}
                 >
-                  {/* แสดงไอคอนง่ายๆ ตาม ID */}
-                  {c.id === 'tel' ? '📞' : c.id === 'line' ? '💬' : c.id === 'facebook' ? 'f' : '📍'}
+                  {renderIcon(c.id)}
                 </div>
                 <div className="space-y-1">
                   <h3 className="font-bold uppercase tracking-widest text-sm text-gray-800">{c.label}</h3>

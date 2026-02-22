@@ -12,6 +12,8 @@ const AdminDashboard: React.FC = () => {
   const [showLoginForm, setShowLoginForm] = useState(false);
   const navigate = useNavigate();
 
+
+
   useEffect(() => {
     const storedToken = localStorage.getItem('adminToken');
     if (!storedToken) {
@@ -21,9 +23,11 @@ const AdminDashboard: React.FC = () => {
     }
   }, []);
 
-  const handleLogout = () => {
+const handleLogout = () => {
     localStorage.removeItem('adminToken');
-    navigate('/');
+    setToken(null);
+    setShowLoginForm(true);
+    alert('เซสชั่นหมดอายุ กรุณาเข้าสู่ระบบใหม่');
   };
 
   if (showLoginForm && !token) {
@@ -96,11 +100,12 @@ const AdminDashboard: React.FC = () => {
         </div>
 
         {/* Content */}
-        <div className="p-8">
-          {activeTab === 'products' && <AdminProductForm token={token} />}
-          {activeTab === 'config' && <AdminConfigForm token={token} />}
-          {activeTab === 'i18n' && <AdminI18nForm token={token} />}
-          {activeTab === 'contact' && <AdminContactForm token={token} />}
+<div className="p-8">
+          {/* ส่งฟังก์ชัน handleLogout เข้าไปเพื่อให้ออกระบบอัตโนมัติเมื่อเจอปัญหา 401/403 */}
+          {activeTab === 'products' && <AdminProductForm token={token} onLogout={handleLogout} />}
+          {activeTab === 'config' && <AdminConfigForm token={token} onLogout={handleLogout} />}
+          {activeTab === 'i18n' && <AdminI18nForm token={token} onLogout={handleLogout} />}
+          {activeTab === 'contact' && <AdminContactForm token={token} onLogout={handleLogout} />}
         </div>
       </div>
     </div>

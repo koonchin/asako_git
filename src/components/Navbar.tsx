@@ -1,4 +1,3 @@
-// components/Navbar.tsx
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router-dom';
@@ -23,11 +22,11 @@ const Navbar: React.FC = () => {
 
   return (
     <nav className="fixed top-0 left-0 w-full bg-white/95 backdrop-blur-md z-50 border-b border-gray-100 shadow-sm">
-      <div className="max-w-7xl mx-auto px-6 h-24 flex items-center justify-between">
+      {/* 🟢 นำ max-w-7xl mx-auto ออก ใช้ w-full px-6 เพื่อให้โลโก้ชิดขอบซ้ายสุด และปุ่มขวาชิดขอบขวาสุด */}
+      <div className="w-full px-6 md:px-12 h-24 flex items-center justify-between">
         
-        {/* ✅ Logo Image */}
+        {/* ✅ Logo Image (ชิดซ้าย) */}
         <Link to="/" className="flex items-center">
-          {/* ตรวจสอบให้แน่ใจว่าไฟล์ logo.jpg อยู่ใน public/images/ */}
           <img 
             src="/images/logo.jpg" 
             alt="ASAKO THAILAND" 
@@ -35,7 +34,7 @@ const Navbar: React.FC = () => {
           />
         </Link>
 
-        {/* Desktop Links */}
+        {/* Desktop Links (ชิดขวา) */}
         <div className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => (
             <Link

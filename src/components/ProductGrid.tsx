@@ -1,11 +1,14 @@
-// components/ProductGrid.tsx
-import React from 'react';
+import React, { useContext } from 'react';
 import ProductCard from './ProductCard';
-import { PRODUCTS } from '../constants';
-import { useTranslation } from 'react-i18next'; // Import
+import { useTranslation } from 'react-i18next';
+import { SiteDataContext } from '../App'; // <--- Import Context
 
 const ProductGrid: React.FC = () => {
-  const { t } = useTranslation(); // Hook
+  const { t } = useTranslation(); 
+  
+  // ดึงข้อมูลสินค้าจาก Context (Database) แทนจากไฟล์ Constants
+  const siteData = useContext(SiteDataContext);
+  const products = siteData?.products || [];
 
   return (
     <section id="inventory" className="py-24 px-6 bg-gray-50/50">
@@ -29,8 +32,8 @@ const ProductGrid: React.FC = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12">
-          {PRODUCTS.map((product) => (
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12">
+          {products.map((product: any) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </div>
