@@ -17,10 +17,10 @@ const AdminI18nForm: React.FC<{ token: string }> = ({ token }) => {
   useEffect(() => {
     fetchTexts();
   }, []);
-
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
 const fetchTexts = async () => {
   try {
-    const response = await fetch('import.meta.env.VITE_API_URL/i18n/texts');
+    const response = await fetch(`${API_URL}/i18n/texts`);
     const data = await response.json();
     
     // ✅ ตรวจสอบว่าเป็น Array หรือไม่ ถ้าไม่ใช่ (เป็น Object แบบที่คุณส่งมา) ให้แปลงเป็น Array ก่อน
@@ -53,7 +53,7 @@ const fetchTexts = async () => {
 
   const handleUpdate = async (text: I18nText) => {
     try {
-      const response = await fetch(`import.meta.env.VITE_API_URL/i18n/texts/${text.id}`, {
+      const response = await fetch(`${API_URL}/i18n/texts/${text.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

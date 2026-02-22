@@ -38,7 +38,7 @@ app.get('/api/health', (req, res) => {
 });
 
 // Database connection and server start
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 const startServer = async () => {
   try {
