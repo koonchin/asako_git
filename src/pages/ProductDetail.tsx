@@ -92,7 +92,7 @@ const ProductDetail: React.FC = () => {
               {getCategory()}
             </span>
             <h1 className="text-3xl md:text-5xl font-black text-gray-900 tracking-tighter uppercase">{getName()}</h1>
-            <p className="text-3xl font-black text-red-600">฿{Number(product.price).toLocaleString()}</p>
+            {/* <p className="text-3xl font-black text-red-600">฿{Number(product.price).toLocaleString()}</p> */}
           </div>
 
           <div className="border-t border-gray-100 pt-8 space-y-4">

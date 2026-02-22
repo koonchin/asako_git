@@ -61,9 +61,9 @@ const ProductCard: React.FC<{ product: any }> = ({ product }) => {
             >
               {getName()}
             </h3>
-            <span className="text-xs font-bold text-gray-400 whitespace-nowrap">
+            {/* <span className="text-xs font-bold text-gray-400 whitespace-nowrap">
               ฿{Number(product.price).toLocaleString()}
-            </span>
+            </span> */}
           </div>
           
       <div className="mt-auto pt-4 grid grid-cols-2 gap-2">
@@ -107,7 +107,7 @@ const ProductCard: React.FC<{ product: any }> = ({ product }) => {
                 <img src={imageUrl} alt={getName()} className="w-16 h-16 object-cover rounded-md border border-gray-200 shadow-sm bg-white" />
                 <div>
                   <h4 className="font-bold text-gray-900 text-sm line-clamp-2">{getName()}</h4>
-                  <p className="text-red-600 font-black text-sm mt-1">฿{Number(product.price).toLocaleString()}</p>
+                  {/* <p className="text-red-600 font-black text-sm mt-1">฿{Number(product.price).toLocaleString()}</p> */}
                 </div>
               </div>
 
