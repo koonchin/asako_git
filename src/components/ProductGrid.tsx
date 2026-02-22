@@ -1,6 +1,6 @@
-import React, { useContext } from 'react';
 import ProductCard from './ProductCard';
 import { useTranslation } from 'react-i18next';
+import React, { useContext } from 'react';
 import { SiteDataContext } from '../App'; // <--- Import Context
 
 const ProductGrid: React.FC = () => {

@@ -14,6 +14,7 @@ interface SiteConfig {
   facebook_url: string;
   instagram_url: string;
   line_url: string;
+  map_url: string;
 }
 
 const AdminConfigForm: React.FC<{ token: string }> = ({ token }) => {
@@ -121,6 +122,14 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
             placeholder="Facebook URL"
             value={config.facebook_url}
             onChange={(e) => setConfig({ ...config, facebook_url: e.target.value })}
+            className="w-full px-4 py-2 border border-gray-300 rounded"
+          />
+          {/* ✅ เพิ่มช่องกรอก Google Maps */}
+          <input
+            type="url"
+            placeholder="Google Maps URL"
+            value={config.map_url || ''}
+            onChange={(e) => setConfig({ ...config, map_url: e.target.value })}
             className="w-full px-4 py-2 border border-gray-300 rounded"
           />
           <input

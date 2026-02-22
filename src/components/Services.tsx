@@ -1,10 +1,22 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CONTACT_INFO } from '../constants';
+import { SiteDataContext } from '../App'; // <--- Import Context
 
 const Services: React.FC = () => {
   const { t } = useTranslation();
+  const siteData = useContext(SiteDataContext);
+  const config = siteData?.config || {};
 
+// ✅ 1. อัปเดตตัวแปร contacts เพิ่มแผนที่เข้าไป
+  const contacts = [
+    { id: 'facebook', label: 'Facebook', link: config.facebook_url, color: 'bg-[#1877F2]' },
+    { id: 'line', label: 'Line', link: config.line_url, color: 'bg-[#00C300]' },
+    { id: 'tel', label: config.phone || 'Tel', link: config.phone ? `tel:${config.phone}` : '', color: 'bg-green-600' },
+    { id: 'mail', label: config.email || 'Email', link: config.email ? `mailto:${config.email}` : '', color: 'bg-gray-600' },
+    { id: 'map', label: 'Google Maps', link: config.map_url, color: 'bg-red-500' } // ✅ เพิ่ม Map
+  ].filter(c => c.link); // ซ่อนปุ่มอัตโนมัติถ้าไม่ได้กรอกข้อมูล
+  
   const highlights = [
     { title: t('highlights.item1_t'), desc: t('highlights.item1_d'), icon: <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /> },
     { title: t('highlights.item2_t'), desc: t('highlights.item2_d'), icon: <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /> },
@@ -16,16 +28,15 @@ const Services: React.FC = () => {
     { title: t('highlights.item8_t'), desc: t('highlights.item8_d'), icon: <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /> }
   ];
 
-  const renderIcon = (id: string) => {
-    if (id === 'facebook') return <img src="/images/facebook-logo.png" alt="Facebook" className="w-full h-full object-cover" />;    
-    // ✅ เปลี่ยนเป็นใช้รูปภาพสำหรับ Line
-    if (id === 'line') return <img src="/images/line-logo.png" alt="Line" className="w-full h-full object-cover" />;
-    
-    if (id === 'tel') return <svg fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24" className="w-8 h-8"><path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>;
-    if (id === 'map') return <svg viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8"><path d="M12 0C7.58 0 4 3.58 4 8c0 5.25 8 16 8 16s8-10.75 8-16c0-4.42-3.58-8-8-8zm0 11.5c-1.93 0-3.5-1.57-3.5-3.5S10.07 4.5 12 4.5 15.5 6.07 15.5 8 13.93 11.5 12 11.5z"/></svg>;
-    return <svg viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8"><circle cx="12" cy="12" r="10" /></svg>;
-  };
-
+// ✅ 2. อัปเดตฟังก์ชันไอคอน
+    const renderIcon = (id: string) => {
+        if (id === 'facebook') return <img src="/images/facebook-logo.png" alt="Facebook" className="w-full h-full object-cover" />;
+        if (id === 'line') return <img src="/images/line-logo.png" alt="Line" className="w-full h-full object-cover" />;
+        if (id === 'tel') return <img src="/images/tel-logo.png" alt="Tel" className="w-full h-full object-cover" />;
+        if (id === 'mail') return <img src="/images/mail-logo.png" alt="Mail" className="w-full h-full object-cover" />;
+        if (id === 'map') return <img src="/images/map-logo.png" alt="Map" className="w-full h-full object-cover" />;
+        return null;
+      };
   return (
     <>
       <section id="services" className="py-24 px-6 bg-red-700 text-white">
@@ -75,27 +86,27 @@ const Services: React.FC = () => {
             <div className="w-16 h-1 bg-red-600 mx-auto"></div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-            {CONTACT_INFO.map((c) => (
+          <div className="flex flex-wrap md:flex-nowrap justify-center gap-4 md:gap-6 w-full">
+            {contacts.map((c) => (
               <a 
                 key={c.id}
                 href={c.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex flex-col items-center gap-4 p-6 bg-white shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all rounded-lg group"
+                className="flex flex-col items-center justify-center gap-4 p-6 bg-white shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all rounded-lg group w-full sm:w-40 md:flex-1 max-w-[250px]"
               >
                 <div 
-                  className="w-16 h-16 rounded-full flex items-center justify-center text-white shadow-md group-hover:scale-110 transition-transform overflow-hidden"
-                  style={{ backgroundColor: (c.id === 'line' || c.id === 'facebook') ? 'transparent' : c.color }}
+                  className="w-16 h-16 rounded-full flex items-center justify-center shadow-md group-hover:scale-110 transition-transform overflow-hidden bg-transparent"
                 >
                   {renderIcon(c.id)}
                 </div>
-                <div className="space-y-1">
-                  <h3 className="font-bold uppercase tracking-widest text-sm text-gray-800">{c.label}</h3>
+                <div className="space-y-1 text-center w-full">
+                  <h3 className="font-bold uppercase tracking-widest text-sm text-gray-800 truncate">{c.label}</h3>
                 </div>
               </a>
             ))}
           </div>
+          
         </div>
       </section>
     </>

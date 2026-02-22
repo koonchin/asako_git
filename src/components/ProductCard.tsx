@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useNavigate } from 'react-router-dom'; // ✅ Import Link, useNavigate
-import { CONTACT_INFO } from '../constants';
+import { useNavigate } from 'react-router-dom';
+import { SiteDataContext } from '../App';
 
 const ProductCard: React.FC<{ product: any }> = ({ product }) => {
   const { i18n, t } = useTranslation(); 
@@ -9,9 +9,23 @@ const ProductCard: React.FC<{ product: any }> = ({ product }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
 
+  // ✅ ดึงข้อมูล config จาก Database มาใช้ทำปุ่มติดต่อใน Modal
+  const siteData = useContext(SiteDataContext);
+  const config = siteData?.config || {};
+
   const getName = () => product[`name_${lang}`] || product.name_en;
   const getCategory = () => product[`category_${lang}`] || product.category_en;
   const getDesc = () => product[`description_${lang}`] || product.description_en;
+
+  // ✅ สร้าง Array ช่องทางติดต่อจาก Config (อันไหนไม่มีข้อมูล จะถูก filter ทิ้งอัตโนมัติ)
+// ✅ 1. อัปเดตตัวแปร contacts เพิ่มแผนที่เข้าไป
+  const contacts = [
+    { id: 'facebook', label: 'Facebook', link: config.facebook_url, color: 'bg-[#1877F2]' },
+    { id: 'line', label: 'Line', link: config.line_url, color: 'bg-[#00C300]' },
+    { id: 'tel', label: config.phone || 'Tel', link: config.phone ? `tel:${config.phone}` : '', color: 'bg-green-600' },
+    { id: 'mail', label: config.email || 'Email', link: config.email ? `mailto:${config.email}` : '', color: 'bg-gray-600' },
+    { id: 'map', label: 'Google Maps', link: config.map_url, color: 'bg-red-500' } // ✅ เพิ่ม Map
+  ].filter(c => c.link); // ซ่อนปุ่มอัตโนมัติถ้าไม่ได้กรอกข้อมูล
 
   const specs = getDesc() ? String(getDesc()).split(',') : [];
 
@@ -23,19 +37,20 @@ const ProductCard: React.FC<{ product: any }> = ({ product }) => {
     imageUrl = `${backendUrl}${imageUrl}`;
   }
 
-  // ✅ ฟังก์ชันแสดงไอคอนติดต่อ (นำมาจาก Services)
-  const renderIcon = (id: string) => {
-    if (id === 'facebook') return <img src="/images/facebook-logo.png" alt="Facebook" className="w-full h-full object-cover" />;
-    if (id === 'line') return <img src="/images/line-logo.png" alt="Line" className="w-full h-full object-cover" />;
-    if (id === 'tel') return <svg fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24" className="w-full h-full p-2"><path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>;
-    if (id === 'map') return <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full p-2"><path d="M12 0C7.58 0 4 3.58 4 8c0 5.25 8 16 8 16s8-10.75 8-16c0-4.42-3.58-8-8-8zm0 11.5c-1.93 0-3.5-1.57-3.5-3.5S10.07 4.5 12 4.5 15.5 6.07 15.5 8 13.93 11.5 12 11.5z"/></svg>;
-    return <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full p-2"><circle cx="12" cy="12" r="10" /></svg>;
-  };
+// ✅ 2. อัปเดตฟังก์ชันไอคอน
+    const renderIcon = (id: string) => {
+        if (id === 'facebook') return <img src="/images/facebook-logo.png" alt="Facebook" className="w-full h-full object-cover" />;
+        if (id === 'line') return <img src="/images/line-logo.png" alt="Line" className="w-full h-full object-cover" />;
+        if (id === 'tel') return <img src="/images/tel-logo.png" alt="Tel" className="w-full h-full object-cover" />;
+        if (id === 'mail') return <img src="/images/mail-logo.png" alt="Mail" className="w-full h-full object-cover" />;
+        if (id === 'map') return <img src="/images/map-logo.png" alt="Map" className="w-full h-full object-cover" />;
+        return null;
+      };
 
   return (
     <>
       <div className="group bg-white border border-gray-100 hover:border-gray-200 transition-all hover:shadow-xl hover:shadow-gray-200/40 p-1 flex flex-col h-full">
-        {/* ✅ กดที่รูปแล้วเปลี่ยนหน้า */}
+        {/* ✅ กดที่รูปแล้วเปลี่ยนหน้าไปที่ Product Detail */}
         <div 
           onClick={() => navigate(`/product/${product.id}`)}
           className="aspect-square w-full overflow-hidden bg-gray-50 relative cursor-pointer"
@@ -61,12 +76,24 @@ const ProductCard: React.FC<{ product: any }> = ({ product }) => {
             >
               {getName()}
             </h3>
+            {/* ซ่อนราคาตามที่ต้องการ */}
             {/* <span className="text-xs font-bold text-gray-400 whitespace-nowrap">
               ฿{Number(product.price).toLocaleString()}
             </span> */}
           </div>
           
-      <div className="mt-auto pt-4 grid grid-cols-2 gap-2">
+          <div className="space-y-1.5 border-t border-gray-50 pt-4 flex-grow">
+            {specs.map((spec: string, i: number) => (
+              <div key={i} className="flex items-center gap-2">
+                <span className="w-1 h-1 bg-gray-200 rounded-full shrink-0"></span>
+                <span className="text-[10px] font-medium text-gray-400 uppercase tracking-widest line-clamp-1">
+                   {spec.trim()}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-auto pt-4 grid grid-cols-2 gap-2">
             <button 
               onClick={() => navigate(`/product/${product.id}`)}
               className="w-full bg-gray-100 hover:bg-gray-200 text-gray-800 px-2 py-3 text-[10px] font-black uppercase tracking-[0.1em] transition-all duration-300"
@@ -107,6 +134,7 @@ const ProductCard: React.FC<{ product: any }> = ({ product }) => {
                 <img src={imageUrl} alt={getName()} className="w-16 h-16 object-cover rounded-md border border-gray-200 shadow-sm bg-white" />
                 <div>
                   <h4 className="font-bold text-gray-900 text-sm line-clamp-2">{getName()}</h4>
+                  {/* ซ่อนราคาใน Modal ด้วย */}
                   {/* <p className="text-red-600 font-black text-sm mt-1">฿{Number(product.price).toLocaleString()}</p> */}
                 </div>
               </div>
@@ -117,7 +145,7 @@ const ProductCard: React.FC<{ product: any }> = ({ product }) => {
                   {t('contact.title') || 'Contact us via'}
                 </p>
                 <div className="grid grid-cols-2 gap-3">
-                  {CONTACT_INFO.map(c => (
+                  {contacts.map(c => (
                     <a 
                       key={c.id} 
                       href={c.link} 
