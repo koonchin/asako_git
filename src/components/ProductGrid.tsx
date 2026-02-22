@@ -1,14 +1,35 @@
+import React, { useContext } from 'react';
 import ProductCard from './ProductCard';
 import { useTranslation } from 'react-i18next';
-import React, { useContext } from 'react';
-import { SiteDataContext } from '../App'; // <--- Import Context
+import { useLocation } from 'react-router-dom';
+import { SiteDataContext } from '../App';
 
-const ProductGrid: React.FC = () => {
+// ✅ เพิ่ม Props เพื่อรับค่าว่าจะโชว์เฉพาะ Featured หรือไม่
+interface ProductGridProps {
+  featuredOnly?: boolean;
+}
+
+const ProductGrid: React.FC<ProductGridProps> = ({ featuredOnly = false }) => {
   const { t } = useTranslation(); 
+  const location = useLocation();
   
-  // ดึงข้อมูลสินค้าจาก Context (Database) แทนจากไฟล์ Constants
   const siteData = useContext(SiteDataContext);
-  const products = siteData?.products || [];
+  let products = siteData?.products || [];
+
+  // 1. กรองเฉพาะสินค้าที่เปิดขาย (Active)
+  products = products.filter((p: any) => p.is_active);
+
+  // 2. ถ้ามาจากหน้า Home ให้กรองเฉพาะที่ติ๊ก Featured (แสดงหน้าแรก)
+  if (featuredOnly) {
+    products = products.filter((p: any) => p.is_featured);
+  }
+
+  // 3. กรองตามหมวดหมู่ (เผื่อเวลากดปุ่ม View Category จากหน้า Home)
+  const searchParams = new URLSearchParams(location.search);
+  const categoryFilter = searchParams.get('category');
+  if (categoryFilter) {
+    products = products.filter((p: any) => p.category_en === categoryFilter);
+  }
 
   return (
     <section id="inventory" className="py-24 px-6 bg-gray-50/50">
@@ -19,30 +40,32 @@ const ProductGrid: React.FC = () => {
               {t('product_grid.badge')}
             </h2>
             <p className="text-3xl md:text-4xl font-black text-gray-900 tracking-tighter uppercase">
-              {t('product_grid.title')}
+              {categoryFilter ? categoryFilter : t('product_grid.title')}
             </p>
           </div>
-          <div className="flex gap-4">
-             <button className="px-6 py-2 border border-gray-200 text-[10px] font-bold uppercase tracking-widest hover:bg-white transition-colors">
-               {t('product_grid.filter')}
-             </button>
-             <button className="px-6 py-2 border border-gray-200 text-[10px] font-bold uppercase tracking-widest hover:bg-white transition-colors">
-               {t('product_grid.sort')}
-             </button>
+          {!featuredOnly && (
+            <div className="flex gap-4">
+               <button className="px-6 py-2 border border-gray-200 text-[10px] font-bold uppercase tracking-widest hover:bg-white transition-colors">
+                 {t('product_grid.filter')}
+               </button>
+               <button className="px-6 py-2 border border-gray-200 text-[10px] font-bold uppercase tracking-widest hover:bg-white transition-colors">
+                 {t('product_grid.sort')}
+               </button>
+            </div>
+          )}
+        </div>
+
+        {products.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12">
+            {products.map((product: any) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
           </div>
-        </div>
-
-<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12">
-          {products.map((product: any) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
-
-        {/* <div className="mt-20 text-center">
-          <button className="bg-gray-900 hover:bg-gray-800 text-white px-12 py-5 text-xs font-bold uppercase tracking-[0.3em] transition-all">
-            {t('common.load_more')}
-          </button>
-        </div> */}
+        ) : (
+          <div className="text-center py-20 text-gray-500 font-bold">
+            No products found.
+          </div>
+        )}
       </div>
     </section>
   );

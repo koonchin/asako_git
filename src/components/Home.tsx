@@ -95,8 +95,9 @@ const Home: React.FC = () => {
         </div>
       </section>
 
+  {/* 5. Feature product (Product Grid) */}
       <div id="product-grid">
-        <ProductGrid />
+        <ProductGrid featuredOnly={true} />
       </div>
 
       <div className="bg-red-700">
