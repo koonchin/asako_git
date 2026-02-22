@@ -25,6 +25,7 @@ const SiteConfig = sequelize.define('SiteConfig', {
   facebook_url: DataTypes.STRING,
   instagram_url: DataTypes.STRING,
   line_url: DataTypes.STRING,
+  map_url: DataTypes.TEXT
 }, {
   tableName: 'site_config',
   timestamps: true,
