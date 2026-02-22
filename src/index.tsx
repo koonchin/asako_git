@@ -3,6 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import './i18n';
+import './index.css'; // <-- Add this import!
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {
