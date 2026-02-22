@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { LocalizedString } from '../types';
-import { CONTACT_INFO } from '../constants'; // ✅ Import ข้อมูลติดต่อ
+import { Link, useNavigate } from 'react-router-dom'; // ✅ Import Link, useNavigate
+import { CONTACT_INFO } from '../constants';
 
 const ProductCard: React.FC<{ product: any }> = ({ product }) => {
   const { i18n, t } = useTranslation(); 
   const lang = i18n.language || 'en';
-  const [isModalOpen, setIsModalOpen] = useState(false); // ✅ State ปิด-เปิด Modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
 
   const getName = () => product[`name_${lang}`] || product.name_en;
   const getCategory = () => product[`category_${lang}`] || product.category_en;
@@ -34,7 +35,11 @@ const ProductCard: React.FC<{ product: any }> = ({ product }) => {
   return (
     <>
       <div className="group bg-white border border-gray-100 hover:border-gray-200 transition-all hover:shadow-xl hover:shadow-gray-200/40 p-1 flex flex-col h-full">
-        <div className="aspect-square w-full overflow-hidden bg-gray-50 relative">
+        {/* ✅ กดที่รูปแล้วเปลี่ยนหน้า */}
+        <div 
+          onClick={() => navigate(`/product/${product.id}`)}
+          className="aspect-square w-full overflow-hidden bg-gray-50 relative cursor-pointer"
+        >
           <img
             src={imageUrl} 
             alt={getName()} 
@@ -50,7 +55,10 @@ const ProductCard: React.FC<{ product: any }> = ({ product }) => {
         {/* ให้เนื้อหาตรงกลางดันปุ่มลงไปชิดด้านล่างสุดเสมอ */}
         <div className="p-6 space-y-4 flex flex-col flex-grow">
           <div className="flex justify-between items-start gap-2">
-            <h3 className="text-sm font-black uppercase tracking-tighter text-gray-900 group-hover:text-red-600 transition-colors line-clamp-2">
+            <h3 
+              onClick={() => navigate(`/product/${product.id}`)}
+              className="text-sm font-black uppercase tracking-tighter text-gray-900 hover:text-red-600 transition-colors line-clamp-2 cursor-pointer"
+            >
               {getName()}
             </h3>
             <span className="text-xs font-bold text-gray-400 whitespace-nowrap">
@@ -58,23 +66,20 @@ const ProductCard: React.FC<{ product: any }> = ({ product }) => {
             </span>
           </div>
           
-          <div className="space-y-1.5 border-t border-gray-50 pt-4 flex-grow">
-            {specs.map((spec: string, i: number) => (
-              <div key={i} className="flex items-center gap-2">
-                <span className="w-1 h-1 bg-gray-200 rounded-full shrink-0"></span>
-                <span className="text-[10px] font-medium text-gray-400 uppercase tracking-widest line-clamp-1">
-                   {spec.trim()}
-                </span>
-              </div>
-            ))}
+      <div className="mt-auto pt-4 grid grid-cols-2 gap-2">
+            <button 
+              onClick={() => navigate(`/product/${product.id}`)}
+              className="w-full bg-gray-100 hover:bg-gray-200 text-gray-800 px-2 py-3 text-[10px] font-black uppercase tracking-[0.1em] transition-all duration-300"
+            >
+              {t('common.view_details')}
+            </button>
+            <button 
+              onClick={() => setIsModalOpen(true)}
+              className="w-full bg-red-600 hover:bg-red-700 text-white px-2 py-3 text-[10px] font-black uppercase tracking-[0.1em] transition-all duration-300"
+            >
+              {t('common.inquire')}
+            </button>
           </div>
-
-          <button 
-            onClick={() => setIsModalOpen(true)} // ✅ กดปุ่มแล้วเปิด Modal
-            className="mt-auto w-full bg-white hover:bg-red-600 border border-gray-100 hover:border-red-600 text-gray-900 hover:text-white px-4 py-3 text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-300"
-          >
-            {t('common.inquire') || 'INQUIRE NOW'}
-          </button>
         </div>
       </div>
 

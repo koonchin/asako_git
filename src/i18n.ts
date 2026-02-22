@@ -100,10 +100,8 @@ const resources = {
         financing: "Financing",
         warranty: "Warranty"
       },
-      common: {
-        inquire: "Inquire Now",
-        load_more: "Load More Units"
-      },
+      common: { inquire: "Inquire Now", load_more: "Load More Units", view_details: "View Details" },
+                product_detail: { related: "Related Products", back: "Back to Inventory" },
       contact: {
         title: "Contact Channels",
         desc: "Reach out to us via any of these platforms."
@@ -236,10 +234,8 @@ const resources = {
         financing: "สินเชื่อ",
         warranty: "การรับประกัน"
       },
-      common: {
-        inquire: "สอบถามทันที",
-        load_more: "ดูสินค้าเพิ่มเติม"
-      },
+      common: { inquire: "สอบถามทันที", load_more: "ดูสินค้าเพิ่มเติม", view_details: "ดูรายละเอียด" },
+                product_detail: { related: "สินค้าที่เกี่ยวข้อง", back: "กลับไปหน้าสินค้า" },
       contact: {
         title: "ช่องทางการติดต่อ",
         desc: "ติดต่อเราได้ผ่านช่องทางต่างๆ ดังนี้"
@@ -372,10 +368,8 @@ const resources = {
         financing: "融资",
         warranty: "保修"
       },
-      common: {
-        inquire: "立即咨询",
-        load_more: "加载更多"
-      },
+      common: { inquire: "立即咨询", load_more: "加载更多", view_details: "查看详情" },
+              product_detail: { related: "相关产品", back: "返回库存" },
       contact: {
         title: "联系方式",
         desc: "通过以下任何平台与我们联系。"

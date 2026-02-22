@@ -12,7 +12,7 @@ export const SITE_CONFIG = {
     founderImage: "/images/person.jpg",
   },
   home: {
-    promotionMain: "/images/demo.jpg",
+    promotionMain: "/images/promotion.jpg",
     catalogMockup1: "/images/7/1.jpg",
     catalogMockup2: "/images/8/1.jpg",
     dealerBackground: "/images/image_1e7a1c.jpg",

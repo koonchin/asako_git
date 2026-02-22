@@ -21,6 +21,10 @@ const Product = sequelize.define('Product', {
   category_th: DataTypes.STRING,
   category_cn: DataTypes.STRING,
   image_url: DataTypes.STRING,
+  detail_images: {
+    type: DataTypes.TEXT, // เก็บเป็น JSON String เช่น '["/uploads/a.jpg", "/uploads/b.jpg"]'
+    allowNull: true,
+  },
   is_featured: {
     type: DataTypes.BOOLEAN,
     defaultValue: false,

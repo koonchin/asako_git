@@ -7,6 +7,7 @@ import ProductGrid from './components/ProductGrid';
 import About from './components/About';
 import Services from './components/Services';
 import AdminDashboard from './pages/adminDashboard';
+import ProductDetail from './pages/ProductDetail'; // ✅ Import หน้าใหม่
 import Footer from './components/Footer';
 
 interface SiteData {
@@ -40,7 +41,7 @@ const App: React.FC = () => {
     return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
   }
 
-  return (
+return (
     <SiteDataContext.Provider value={siteData}>
       <Router>
         <ScrollToTop />
@@ -53,6 +54,7 @@ const App: React.FC = () => {
               <Route path="/about" element={<About />} />
               <Route path="/services" element={<Services />} />
               <Route path="/admin" element={<AdminDashboard />} />
+              <Route path="/product/:id" element={<ProductDetail />} /> {/* ✅ เพิ่ม Route นี้ */}
             </Routes>
           </div>
           <Footer />
@@ -61,5 +63,4 @@ const App: React.FC = () => {
     </SiteDataContext.Provider>
   );
 };
-
 export default App;
