@@ -77,9 +77,9 @@ const ProductCard: React.FC<{ product: any }> = ({ product }) => {
               {getName()}
             </h3>
             {/* ซ่อนราคาตามที่ต้องการ */}
-            {/* <span className="text-xs font-bold text-gray-400 whitespace-nowrap">
+            <span className="text-xs font-bold text-gray-400 whitespace-nowrap">
               ฿{Number(product.price).toLocaleString()}
-            </span> */}
+            </span>
           </div>
           
           <div className="space-y-1.5 border-t border-gray-50 pt-4 flex-grow">
@@ -135,7 +135,7 @@ const ProductCard: React.FC<{ product: any }> = ({ product }) => {
                 <div>
                   <h4 className="font-bold text-gray-900 text-sm line-clamp-2">{getName()}</h4>
                   {/* ซ่อนราคาใน Modal ด้วย */}
-                  {/* <p className="text-red-600 font-black text-sm mt-1">฿{Number(product.price).toLocaleString()}</p> */}
+                  <p className="text-red-600 font-black text-sm mt-1">฿{Number(product.price).toLocaleString()}</p>
                 </div>
               </div>
 

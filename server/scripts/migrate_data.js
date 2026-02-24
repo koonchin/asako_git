@@ -37,7 +37,7 @@ const I18N_TEXTS = [
 
   // --- ABOUT (category: 'about') ---
   { key_path: 'about.badge', en: 'The Founder', th: 'ผู้ก่อตั้ง', cn: '创始人', category: 'about' },
-  { key_path: 'about.title', en: 'Surin Songthanin', th: 'คุณสุรินทร์ ส่งทานิน', cn: 'Surin Songthanin (苏林)', category: 'about' },
+  { key_path: 'about.title', en: 'Surin Songthanin', th: 'คุณสุรินทร์   ส่งทานินทร์', cn: 'Surin Songthanin (苏林)', category: 'about' },
   { key_path: 'about.slogan', en: 'Like a thoughtful partner...', th: 'เหมือนเพื่อนคู่คิด...', cn: '像贴心伙伴一样...', category: 'about' },
 
   // --- SERVICES (category: 'services') ---
