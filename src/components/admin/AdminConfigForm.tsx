@@ -17,7 +17,7 @@ interface SiteConfig {
   map_url: string;
 }
 
-const AdminConfigForm: React.FC<{ token: string }> = ({ token }) => {
+const AdminConfigForm: React.FC<{ token: string; onLogout: () => void }> = ({ token, onLogout }) => {
   const [config, setConfig] = useState<SiteConfig | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -37,7 +37,7 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const response = await fetch(`${API_URL}/config`, {
@@ -49,8 +49,13 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
         body: JSON.stringify(config),
       });
 
+      // ✅ เพิ่มการดักจับ Token หมดอายุ
+      if (response.status === 401 || response.status === 403) return onLogout();
+
       if (response.ok) {
         alert('Site configuration updated!');
+      } else {
+        alert('Failed to update config.');
       }
     } catch (error) {
       console.error('Error updating config:', error);
@@ -71,14 +76,14 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
           <input
             type="tel"
             placeholder="Phone"
-            value={config.phone}
+            value={config.phone || ''}
             onChange={(e) => setConfig({ ...config, phone: e.target.value })}
             className="px-4 py-2 border border-gray-300 rounded"
           />
           <input
             type="email"
             placeholder="Email"
-            value={config.email}
+            value={config.email || ''}
             onChange={(e) => setConfig({ ...config, email: e.target.value })}
             className="px-4 py-2 border border-gray-300 rounded"
           />
@@ -91,21 +96,21 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
         <div className="space-y-4">
           <textarea
             placeholder="Address (English)"
-            value={config.address_en}
+            value={config.address_en || ''}
             onChange={(e) => setConfig({ ...config, address_en: e.target.value })}
             className="w-full px-4 py-2 border border-gray-300 rounded"
             rows={3}
           />
           <textarea
             placeholder="Address (Thai)"
-            value={config.address_th}
+            value={config.address_th || ''}
             onChange={(e) => setConfig({ ...config, address_th: e.target.value })}
             className="w-full px-4 py-2 border border-gray-300 rounded"
             rows={3}
           />
           <textarea
             placeholder="Address (Chinese)"
-            value={config.address_cn}
+            value={config.address_cn || ''}
             onChange={(e) => setConfig({ ...config, address_cn: e.target.value })}
             className="w-full px-4 py-2 border border-gray-300 rounded"
             rows={3}
@@ -120,7 +125,7 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
           <input
             type="url"
             placeholder="Facebook URL"
-            value={config.facebook_url}
+            value={config.facebook_url || ''}
             onChange={(e) => setConfig({ ...config, facebook_url: e.target.value })}
             className="w-full px-4 py-2 border border-gray-300 rounded"
           />
@@ -135,14 +140,14 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
           <input
             type="url"
             placeholder="Instagram URL"
-            value={config.instagram_url}
+            value={config.instagram_url || ''}
             onChange={(e) => setConfig({ ...config, instagram_url: e.target.value })}
             className="w-full px-4 py-2 border border-gray-300 rounded"
           />
           <input
             type="url"
             placeholder="Line URL"
-            value={config.line_url}
+            value={config.line_url || ''}
             onChange={(e) => setConfig({ ...config, line_url: e.target.value })}
             className="w-full px-4 py-2 border border-gray-300 rounded"
           />
@@ -155,7 +160,7 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
         <input
           type="url"
           placeholder="Hero Image URL"
-          value={config.hero_image_url}
+          value={config.hero_image_url || ''}
           onChange={(e) => setConfig({ ...config, hero_image_url: e.target.value })}
           className="w-full px-4 py-2 border border-gray-300 rounded mb-4"
         />

@@ -66,14 +66,14 @@ const About: React.FC<AboutProps> = ({ hideContact = false }) => {
 
           <div className="flex-1 space-y-10">
             <div className="space-y-2">
-              <span className="text-xs font-black uppercase tracking-[0.3em] text-red-200 flex items-center gap-2">
+              <span className="text-sm font-black uppercase tracking-[0.3em] text-red-200 flex items-center gap-2">
                 <span className="w-8 h-[1px] bg-red-200"></span>
                 {getText('about.badge')}
               </span>
               <h2 className="text-4xl md:text-5xl font-black tracking-tighter text-black">
                 {getText('about.title')}
               </h2>
-              <p className="text-lg font-medium text-red-100 uppercase tracking-widest">
+              <p className="text-xl font-medium text-red-100 uppercase tracking-widest">
                 {String(getText('about.role')).split(/(ASAKO)/i).map((text, i) => 
                   text.toUpperCase() === 'ASAKO' ? (
                     <span key={i} className="text-black font-black"> {text}</span>
@@ -84,7 +84,7 @@ const About: React.FC<AboutProps> = ({ hideContact = false }) => {
               </p>
             </div>
 
-            <div className="space-y-6 font-light leading-relaxed text-base md:text-lg border-l-2 border-red-400 pl-6 text-red-50">
+            <div className="space-y-6 font-light leading-relaxed text-base md:text-xl border-l-2 border-red-400 pl-6 text-red-50">
               <p className="font-medium text-white">
                 {getText('about.intro')}
               </p>
@@ -95,12 +95,12 @@ const About: React.FC<AboutProps> = ({ hideContact = false }) => {
 
             <div className="grid grid-cols-2 gap-8 pt-6">
               <div className="space-y-2">
-                <span className="block text-5xl font-black text-black">30+</span>
-                <span className="text-[10px] font-bold uppercase tracking-widest text-red-200">{getText('about.stat_years')}</span>
+                <span className="block text-6xl font-black text-black">30+</span>
+                <span className="text-sm font-bold uppercase tracking-widest text-red-200">{getText('about.stat_years')}</span>
               </div>
               <div className="space-y-2">
-                <span className="block text-5xl font-black text-black">100%</span>
-                <span className="text-[10px] font-bold uppercase tracking-widest text-red-200">{getText('about.stat_clients')}</span>
+                <span className="block text-6xl font-black text-black">100%</span>
+                <span className="text-sm font-bold uppercase tracking-widest text-red-200">{getText('about.stat_clients')}</span>
               </div>
             </div>
           </div>

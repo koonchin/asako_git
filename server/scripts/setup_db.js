@@ -34,7 +34,7 @@ const setupDatabase = async () => {
     `);
     console.log('✅ Users table created.');
 
-    // Create products table
+// Create products table
     await connection.query(`
       CREATE TABLE IF NOT EXISTS products (
         id INT AUTO_INCREMENT PRIMARY KEY,
@@ -45,10 +45,13 @@ const setupDatabase = async () => {
         description_th LONGTEXT,
         description_cn LONGTEXT,
         price DECIMAL(10, 2),
+        price_max DECIMAL(10, 2) DEFAULT 0,
+        show_price BOOLEAN DEFAULT TRUE,
         category_en VARCHAR(100),
         category_th VARCHAR(100),
         category_cn VARCHAR(100),
         image_url VARCHAR(500),
+        detail_images LONGTEXT,
         is_featured BOOLEAN DEFAULT FALSE,
         is_active BOOLEAN DEFAULT TRUE,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -57,6 +60,7 @@ const setupDatabase = async () => {
         INDEX idx_featured (is_featured)
       )
     `);
+    
     console.log('✅ Products table created.');
 
     // Create site_config table

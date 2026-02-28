@@ -42,7 +42,7 @@ const Navbar: React.FC = () => {
             <Link
               key={link.path}
               to={link.path}
-              className={`text-xs font-bold uppercase tracking-widest transition-all duration-300 ${
+              className={`text-ml font-bold uppercase tracking-widest transition-all duration-300 ${
                 isActive(link.path) 
                   ? 'text-red-600 border-b-2 border-red-600 pb-1' 
                   : 'text-gray-500 hover:text-red-600 hover:pb-1'
@@ -56,8 +56,8 @@ const Navbar: React.FC = () => {
             {/* ✅ แสดงเบอร์โทรตรง Navbar */}
             {config.phone && (
                <div className="hidden lg:block text-right">
-                  <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{t('nav.inquire')}</p>
-                  <a href={`tel:${config.phone.replace(/\D/g, '').substring(0, 9)}`} className="text-sm font-black text-gray-900 hover:text-red-600">{config.phone}</a>
+                  <p className="text-xs text-gray-400 font-bold uppercase tracking-widest">{t('nav.inquire')}</p>
+                  <a href={`tel:${config.phone.replace(/\D/g, '').substring(0, 9)}`} className="text-base font-black text-gray-900 hover:text-red-600">{config.phone}</a>
                </div>
             )}
             <button className="bg-red-600 hover:bg-red-700 text-white px-6 py-2.5 text-xs font-bold uppercase tracking-widest transition-all shadow-lg shadow-red-600/20 rounded-sm">
@@ -67,7 +67,7 @@ const Navbar: React.FC = () => {
 
           {/* Language Switcher */}
           <div className="relative group ml-4 border-l border-gray-200 pl-4">
-            <button className="flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-gray-900 hover:text-red-600">
+            <button className="flex items-center gap-1 text-sm font-bold uppercase tracking-widest text-gray-900 hover:text-red-600">
               <span className="mr-1">🌐</span> {i18n.language.toUpperCase()}
             </button>
             <div className="absolute right-0 mt-2 w-32 bg-white border border-gray-100 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
@@ -109,7 +109,7 @@ const Navbar: React.FC = () => {
           {config.phone && (
             <a href={`tel:${config.phone.replace(/\D/g, '').substring(0, 9)}`} className="text-center font-bold text-gray-900">{config.phone}</a>
           )}
-          <button className="bg-red-600 text-white px-6 py-3 text-xs font-bold uppercase tracking-widest">
+          <button className="bg-red-600 text-white px-6 py-3 text-sm font-bold uppercase tracking-widest">
             {t('nav.contact')}
           </button>
         </div>

@@ -77,7 +77,7 @@ const ProductCard: React.FC<{ product: any }> = ({ product }) => {
           <div className="flex justify-between items-start gap-2">
             <h3 
               onClick={() => navigate(`/product/${product.id}`)}
-              className="text-sm font-black uppercase tracking-tighter text-gray-900 hover:text-red-600 transition-colors line-clamp-2 cursor-pointer"
+              className="text-base font-black uppercase tracking-tighter text-gray-900 hover:text-red-600 transition-colors line-clamp-2 cursor-pointer"
             >
               {getName()}
             </h3>
@@ -85,11 +85,11 @@ const ProductCard: React.FC<{ product: any }> = ({ product }) => {
             {product.show_price && (
               <div className="text-right">
                 {product.price_max > 0 && (
-                   <span className="text-[10px] font-bold text-gray-400 line-through block">
+                   <span className="text-xs font-bold text-gray-400 line-through block">
                      ฿{Number(product.price_max).toLocaleString()}
                    </span>
                 )}
-                <span className="text-sm font-black text-red-600 whitespace-nowrap block mt-[-2px]">
+                <span className="text-lg font-black text-red-600 whitespace-nowrap block mt-[-2px]">
                   ฿{Number(product.price).toLocaleString()}
                 </span>
               </div>
@@ -100,7 +100,7 @@ const ProductCard: React.FC<{ product: any }> = ({ product }) => {
             {specs.map((spec: string, i: number) => (
               <div key={i} className="flex items-center gap-2">
                 <span className="w-1 h-1 bg-gray-200 rounded-full shrink-0"></span>
-                <span className="text-[10px] font-medium text-gray-400 uppercase tracking-widest line-clamp-1">
+                <span className="text-xs font-medium text-gray-400 uppercase tracking-widest line-clamp-1">
                    {spec.trim()}
                 </span>
               </div>
@@ -110,13 +110,13 @@ const ProductCard: React.FC<{ product: any }> = ({ product }) => {
           <div className="mt-auto pt-4 grid grid-cols-2 gap-2">
             <button 
               onClick={() => navigate(`/product/${product.id}`)}
-              className="w-full bg-gray-100 hover:bg-gray-200 text-gray-800 px-2 py-3 text-[10px] font-black uppercase tracking-[0.1em] transition-all duration-300"
+              className="w-full bg-gray-100 hover:bg-gray-200 text-gray-800 px-2 py-3 text-xs font-black uppercase tracking-[0.1em] transition-all duration-300"
             >
               {t('common.view_details')}
             </button>
             <button 
               onClick={() => setIsModalOpen(true)}
-              className="w-full bg-red-600 hover:bg-red-700 text-white px-2 py-3 text-[10px] font-black uppercase tracking-[0.1em] transition-all duration-300"
+              className="w-full bg-red-600 hover:bg-red-700 text-white px-2 py-3 text-xs font-black uppercase tracking-[0.1em] transition-all duration-300"
             >
               {t('common.inquire')}
             </button>

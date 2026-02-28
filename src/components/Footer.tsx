@@ -43,17 +43,17 @@ const contacts = [
                 </span>
               </div>
               {/* ✅ ใช้ที่อยู่ที่ดึงจาก Database */}
-              <p className="text-xs text-gray-500 font-medium uppercase tracking-widest leading-loose whitespace-pre-line">
+              <p className="text-sm text-gray-500 font-medium uppercase tracking-widest leading-loose whitespace-pre-line">
                 {getAddress()}
               </p>
             </div>
 
           {/* Column 2: Quick Links (เปลี่ยนให้เข้ากับเว็บ) */}
           <div>
-            <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-900 mb-6 opacity-80">
+            <h4 className="text-ml font-black uppercase tracking-[0.2em] text-gray-900 mb-6 opacity-80">
               Quick Links
             </h4>
-            <ul className="space-y-4 text-[10px] font-bold uppercase tracking-widest text-gray-500">
+            <ul className="space-y-4 text-xs font-bold uppercase tracking-widest text-gray-500">
               <li><Link to="/" className="hover:text-red-600 transition-colors">Home</Link></li>
               <li><Link to="/inventory" className="hover:text-red-600 transition-colors">{t('nav.inventory') || 'Inventory'}</Link></li>
               <li><Link to="/services" className="hover:text-red-600 transition-colors">{t('nav.services') || 'Services'}</Link></li>
@@ -63,10 +63,10 @@ const contacts = [
 
 {/* Column 3: Contact Info */}
           <div>
-            <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-900 mb-6 opacity-80">
+            <h4 className="text-ml font-black uppercase tracking-[0.2em] text-gray-900 mb-6 opacity-80">
               {t('nav.contact') || 'Contact Us'}
             </h4>
-            <ul className="space-y-4 text-[10px] font-bold uppercase tracking-widest text-gray-500">
+            <ul className="space-y-4 text-xs font-bold uppercase tracking-widest text-gray-500">
               {/* ✅ ใช้ contacts ที่มาจาก Database */}
               {contacts.map(c => (
                 <li key={c.id}>
@@ -80,16 +80,16 @@ const contacts = [
 
           {/* Column 4: Newsletter */}
           <div className="space-y-6">
-            <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-900 mb-6 opacity-80">
+            <h4 className="text-ml font-black uppercase tracking-[0.2em] text-gray-900 mb-6 opacity-80">
               {t('footer.col_newsletter')}
             </h4>
             <div className="flex gap-2">
               <input
                 type="email"
                 placeholder={t('footer.email_placeholder')}
-                className="flex-1 bg-gray-50 border border-gray-200 px-4 py-3 text-[10px] text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-red-600 transition-colors"
+                className="flex-1 bg-gray-50 border border-gray-200 px-4 py-3 text-xs text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-red-600 transition-colors"
               />
-              <button className="bg-red-600 text-white px-4 py-3 text-[10px] font-black uppercase tracking-widest hover:bg-red-700 transition-colors">
+              <button className="bg-red-600 text-white px-4 py-3 text-xs font-black uppercase tracking-widest hover:bg-red-700 transition-colors">
                 {t('footer.btn_join')}
               </button>
             </div>
@@ -98,10 +98,10 @@ const contacts = [
 
         {/* Bottom Bar */}
         <div className="pt-12 border-t border-gray-200 flex flex-col md:flex-row justify-between items-center gap-6 text-gray-500">
-          <p className="text-[10px] font-bold uppercase tracking-[0.3em]">
+          <p className="text-sm font-bold uppercase tracking-[0.3em]">
             {t('footer.rights')}
           </p>
-          <div className="flex gap-8 text-[10px] font-bold uppercase tracking-widest">
+          <div className="flex gap-8 text-xs font-bold uppercase tracking-widest">
             <a href="#" className="hover:text-red-600 transition-colors">{t('footer.link_privacy')}</a>
             <a href="#" className="hover:text-red-600 transition-colors">{t('footer.link_terms')}</a>
             <a href="#" className="hover:text-red-600 transition-colors">{t('footer.link_ethics')}</a>
