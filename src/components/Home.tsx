@@ -18,10 +18,10 @@ const Home: React.FC = () => {
 
   // ✅ เปลี่ยนคำว่า ระบบน้ำ เป็น ปั๊มน้ำ
   const promoCategories = [
-    { id: 1, name: { en: 'Water Pumps', th: 'ปั๊มน้ำ', cn: '水泵' }, img: '/images/5/1.jpg', cat: 'Water Systems' },
-    { id: 2, name: { en: 'Shredders', th: 'เครื่องบดย่อย', cn: '粉碎机' }, img: '/images/2/1.jpg', cat: 'Shredders' },
-    { id: 3, name: { en: 'Processing', th: 'แปรรูปอาหาร', cn: '加工设备' }, img: '/images/3/1.jpg', cat: 'Processing' },
-    { id: 4, name: { en: 'Packaging', th: 'บรรจุภัณฑ์', cn: '包装设备' }, img: '/images/4/1.jpg', cat: 'Packaging' },
+    { id: 1, name: { en: 'Water Pumps', th: 'ปั๊มน้ำ', cn: '水泵' }, img: '/water_pump.jpg', cat: 'Water Systems' },
+    { id: 2, name: { en: 'Shredders', th: 'เครื่องบดย่อย', cn: '粉碎机' }, img: '/cruster.jpg', cat: 'Shredders' },
+    { id: 3, name: { en: 'Processing', th: 'แปรรูปอาหาร', cn: '加工设备' }, img: '/processing.jpg', cat: 'Processing' },
+    { id: 4, name: { en: 'Packaging', th: 'บรรจุภัณฑ์', cn: '包装设备' }, img: '/packaging.jpg', cat: 'Packaging' },
   ];
 
   return (
