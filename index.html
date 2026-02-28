@@ -7,22 +7,24 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
 
 <style>
-    body {
-            /* เปลี่ยนเป็น Prompt และเรียงลำดับฟอนต์สำรองที่ปลอดภัยสำหรับทุกระบบ */
-            font-family: 'Prompt', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        body {
+            /* ✅ ใช้ System Font Stack: การันตีไม่โดด ไม่ลอย จัดกึ่งกลางเป๊ะ 100% บนทุกแพลตฟอร์ม */
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans Thai", sans-serif;
             -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale; /* ช่วยให้ฟอนต์บน Mac คมชัดและไม่บวม */
+            -moz-osx-font-smoothing: grayscale;
+            
+            /* ✅ บังคับ Line-height พื้นฐานเพื่อกันบั๊กกล่องข้อความบีบตัว */
+            line-height: 1.5;
         }
 
-        /* ✅ 1. ย้ายการขยายขนาดมาไว้ที่ html แทน และปรับให้ใหญ่ขึ้นเป็น 135% (ถ้ายังไม่พอ ปรับเป็น 140-150% ได้เลยครับ) */
         html[lang="cn"] {
             font-size: 120% !important; 
         }
 
-        /* ✅ 2. บังคับฟอนต์จีนที่ body อย่างเดียว และเอา font-weight: 500 ออก เพื่อให้ตัวอักษรบางลงเป็นปกติ */
         html[lang="cn"] body {
             font-family: 'Noto Sans SC', sans-serif !important;
         }

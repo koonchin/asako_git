@@ -347,7 +347,28 @@ const resetForm = () => {
             <span className="font-bold text-gray-700">แสดงราคาหน้าเว็บ</span>
           </label>
         </div>
-
+{/* ✅ เพิ่ม UI อัปโหลดรูปภาพหลัก (Main Image) ตรงนี้ */}
+        <div className="mb-6 p-4 border border-gray-200 bg-gray-50 rounded">
+          <label className="block text-sm font-bold text-gray-700 mb-2">Main Image (รูปภาพหลัก 1 รูป)</label>
+          <div className="flex items-center gap-4">
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageUpload} // เรียกใช้ฟังก์ชันที่มีอยู่แล้ว
+              className="px-4 py-2 border border-gray-300 rounded bg-white cursor-pointer w-full md:w-1/2"
+            />
+            {/* แสดงรูปภาพหลักปัจจุบัน (ถ้ามี) */}
+            {formData.image_url && (
+              <div className="relative border border-gray-300 rounded p-1 bg-white">
+                <img 
+                  src={getFullImageUrl(formData.image_url)} 
+                  alt="Main Preview" 
+                  className="w-20 h-20 object-cover rounded" 
+                />
+              </div>
+            )}
+          </div>
+        </div>
         {/* ✅ เพิ่ม UI อัปโหลดรูปภาพ Detail (รองรับ Multiple) */}
         <div className="mb-6 p-4 border border-gray-200 bg-gray-50 rounded">
           <label className="block text-sm font-bold text-gray-700 mb-2">Detail Images (เลือกได้หลายรูปพร้อมกัน)</label>

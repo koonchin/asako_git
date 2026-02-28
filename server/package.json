@@ -7,7 +7,8 @@
     "start": "node index.js",
     "dev": "nodemon index.js",
     "setup-db": "node scripts/setup_db.js",
-    "migrate-data": "node scripts/migrate_data.js"
+    "migrate-data": "node scripts/migrate_data.js",
+    "backup-data": "node scripts/backup_migrate.js"
   },
   "keywords": [],
   "author": "",
