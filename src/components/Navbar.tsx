@@ -1,14 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router-dom';
+import { SiteDataContext } from '../App';
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { t, i18n } = useTranslation();
   const location = useLocation();
+  const siteData = useContext(SiteDataContext);
+  const config = siteData?.config || {};
 
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
+    document.documentElement.lang = lng; // ✅ สั่งเปลี่ยน lang ของ html เพื่อให้ CSS ขยายฟอนต์ทำงาน
     setIsOpen(false);
   };
 
@@ -22,19 +26,17 @@ const Navbar: React.FC = () => {
 
   return (
     <nav className="fixed top-0 left-0 w-full bg-white/95 backdrop-blur-md z-50 border-b border-gray-100 shadow-sm">
-      {/* 🟢 นำ max-w-7xl mx-auto ออก ใช้ w-full px-6 เพื่อให้โลโก้ชิดขอบซ้ายสุด และปุ่มขวาชิดขอบขวาสุด */}
       <div className="w-full px-6 md:px-12 h-24 flex items-center justify-between">
         
-        {/* ✅ Logo Image (ชิดซ้าย) */}
+        {/* ✅ เปลี่ยนเป็น logo.png */}
         <Link to="/" className="flex items-center">
           <img 
-            src="/images/logo.jpg" 
+            src="/images/logo.png" 
             alt="ASAKO THAILAND" 
             className="h-24 w-auto object-contain" 
           />
         </Link>
 
-        {/* Desktop Links (ชิดขวา) */}
         <div className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => (
             <Link
@@ -50,9 +52,18 @@ const Navbar: React.FC = () => {
             </Link>
           ))}
           
-          <button className="bg-red-600 hover:bg-red-700 text-white px-6 py-2.5 text-xs font-bold uppercase tracking-widest transition-all shadow-lg shadow-red-600/20 rounded-sm">
-            {t('nav.inquire')}
-          </button>
+          <div className="flex items-center gap-4 border-l border-gray-200 pl-6">
+            {/* ✅ แสดงเบอร์โทรตรง Navbar */}
+            {config.phone && (
+               <div className="hidden lg:block text-right">
+                  <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{t('nav.inquire')}</p>
+                  <a href={`tel:${config.phone.replace(/\D/g, '').substring(0, 9)}`} className="text-sm font-black text-gray-900 hover:text-red-600">{config.phone}</a>
+               </div>
+            )}
+            <button className="bg-red-600 hover:bg-red-700 text-white px-6 py-2.5 text-xs font-bold uppercase tracking-widest transition-all shadow-lg shadow-red-600/20 rounded-sm">
+              {t('nav.contact')}
+            </button>
+          </div>
 
           {/* Language Switcher */}
           <div className="relative group ml-4 border-l border-gray-200 pl-4">
@@ -95,8 +106,11 @@ const Navbar: React.FC = () => {
             <button onClick={() => changeLanguage('cn')} className={`text-xs font-bold uppercase px-3 py-2 rounded ${i18n.language === 'cn' ? 'bg-red-600 text-white' : 'bg-gray-100'}`}>CN</button>
           </div>
 
+          {config.phone && (
+            <a href={`tel:${config.phone.replace(/\D/g, '').substring(0, 9)}`} className="text-center font-bold text-gray-900">{config.phone}</a>
+          )}
           <button className="bg-red-600 text-white px-6 py-3 text-xs font-bold uppercase tracking-widest">
-            {t('nav.inquire')}
+            {t('nav.contact')}
           </button>
         </div>
       </div>

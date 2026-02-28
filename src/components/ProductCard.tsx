@@ -19,13 +19,18 @@ const ProductCard: React.FC<{ product: any }> = ({ product }) => {
 
   // ✅ สร้าง Array ช่องทางติดต่อจาก Config (อันไหนไม่มีข้อมูล จะถูก filter ทิ้งอัตโนมัติ)
 // ✅ 1. อัปเดตตัวแปร contacts เพิ่มแผนที่เข้าไป
+  const getCallablePhone = (tel: string) => tel.replace(/\D/g, '').substring(0, tel.startsWith('02') ? 9 : 10);
+
+
+// ✅ 1. อัปเดตตัวแปร contacts เพิ่มแผนที่เข้าไป
   const contacts = [
     { id: 'facebook', label: 'Facebook', link: config.facebook_url, color: 'bg-[#1877F2]' },
     { id: 'line', label: 'Line', link: config.line_url, color: 'bg-[#00C300]' },
-    { id: 'tel', label: config.phone || 'Tel', link: config.phone ? `tel:${config.phone}` : '', color: 'bg-green-600' },
+    // ✅ ใช้ getCallablePhone สำหรับลิงก์
+    { id: 'tel', label: config.phone || 'Tel', link: config.phone ? `tel:${getCallablePhone(config.phone)}` : '', color: 'bg-green-600' },
     { id: 'mail', label: config.email || 'Email', link: config.email ? `mailto:${config.email}` : '', color: 'bg-gray-600' },
-    { id: 'map', label: 'Google Maps', link: config.map_url, color: 'bg-red-500' } // ✅ เพิ่ม Map
-  ].filter(c => c.link); // ซ่อนปุ่มอัตโนมัติถ้าไม่ได้กรอกข้อมูล
+    { id: 'map', label: 'Google Maps', link: config.map_url, color: 'bg-red-500' }
+  ].filter(c => c.link); // ซ่อนปุ่มอัตโนมัติถ้าไม่ได้กรอกข้อมูล // ซ่อนปุ่มอัตโนมัติถ้าไม่ได้กรอกข้อมูล
 
   const specs = getDesc() ? String(getDesc()).split(',') : [];
 
@@ -76,10 +81,19 @@ const ProductCard: React.FC<{ product: any }> = ({ product }) => {
             >
               {getName()}
             </h3>
-            {/* ซ่อนราคาตามที่ต้องการ */}
-            <span className="text-xs font-bold text-gray-400 whitespace-nowrap">
-              ฿{Number(product.price).toLocaleString()}
-            </span>
+            {/* ✅ โชว์ราคาเป็นสีแดง และเช็คค่า price_max */}
+            {product.show_price && (
+              <div className="text-right">
+                {product.price_max > 0 && (
+                   <span className="text-[10px] font-bold text-gray-400 line-through block">
+                     ฿{Number(product.price_max).toLocaleString()}
+                   </span>
+                )}
+                <span className="text-sm font-black text-red-600 whitespace-nowrap block mt-[-2px]">
+                  ฿{Number(product.price).toLocaleString()}
+                </span>
+              </div>
+            )}
           </div>
           
           <div className="space-y-1.5 border-t border-gray-50 pt-4 flex-grow">

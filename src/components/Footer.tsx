@@ -36,10 +36,10 @@ const contacts = [
             <div className="space-y-6">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 bg-red-600 flex items-center justify-center rounded-sm">
-                  <span className="text-white font-black text-xs">NA</span>
+                  <span className="text-white font-black text-xs">ASK</span>
                 </div>
                 <span className="text-lg font-black tracking-tighter uppercase text-gray-900">
-                  Asako<span className="text-gray-500">Agri</span>
+                  Asako<span className="text-gray-500">THAILAND</span>
                 </span>
               </div>
               {/* ✅ ใช้ที่อยู่ที่ดึงจาก Database */}

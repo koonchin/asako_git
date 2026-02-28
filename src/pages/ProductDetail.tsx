@@ -92,7 +92,20 @@ const ProductDetail: React.FC = () => {
               {getCategory()}
             </span>
             <h1 className="text-3xl md:text-5xl font-black text-gray-900 tracking-tighter uppercase">{getName()}</h1>
-            <p className="text-3xl font-black text-red-600">฿{Number(product.price).toLocaleString()}</p>
+            
+            {/* ✅ แสดงราคาหน้า Detail เป็นสีแดงใหญ่ๆ */}
+              {product.show_price && (
+               <div className="space-y-1">
+                 {product.price_max > 0 && (
+                    <p className="text-lg font-bold text-gray-400 line-through">
+                      ฿{Number(product.price_max).toLocaleString()}
+                    </p>
+                 )}
+                 <p className="text-4xl font-black text-red-600">
+                   ฿{Number(product.price).toLocaleString()}
+                 </p>
+               </div>
+            )}
           </div>
 
           <div className="border-t border-gray-100 pt-8 space-y-4">

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
 interface Product {
+  price_max: number;
+  show_price: boolean;
   id?: number;
   name_en: string;
   name_th: string;
@@ -26,12 +28,18 @@ const AdminProductForm: React.FC<{ token: string, onLogout: () => void }> = ({ t
   // State สำหรับรูป Detail โดยเฉพาะ (เป็น Array)
   const [detailImagesArr, setDetailImagesArr] = useState<string[]>([]);
 
-  const [formData, setFormData] = useState<Product>({
+const [formData, setFormData] = useState<Product>({
     name_en: '', name_th: '', name_cn: '',
     description_en: '', description_th: '', description_cn: '',
-    price: 0, category_en: '', category_th: '', category_cn: '',
-    image_url: '', detail_images: '[]', is_featured: false, is_active: true,
-  });
+    price: 0, 
+    price_max: 0,   // ✅ ต้องมีค่าเริ่มต้นเป็น 0 (ไม่ใช่ undefined)
+    category_en: '', category_th: '', category_cn: '',
+    image_url: '', 
+    detail_images: '[]', 
+    is_featured: false, 
+    is_active: true,
+    show_price: true // ✅ ต้องมีค่าเริ่มต้นเสมอ
+});
   
   useEffect(() => {
     fetchProducts();
@@ -172,15 +180,22 @@ const AdminProductForm: React.FC<{ token: string, onLogout: () => void }> = ({ t
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const resetForm = () => {
+const resetForm = () => {
     setFormData({
-      name_en: '', name_th: '', name_cn: '', description_en: '', description_th: '', description_cn: '',
-      price: 0, category_en: '', category_th: '', category_cn: '', image_url: '', detail_images: '[]',
-      is_featured: false, is_active: true,
+      name_en: '', name_th: '', name_cn: '', 
+      description_en: '', description_th: '', description_cn: '',
+      price: 0, 
+      price_max: 0,  // ✅ ใส่ให้ครบ
+      category_en: '', category_th: '', category_cn: '', 
+      image_url: '', 
+      detail_images: '[]',
+      is_featured: false, 
+      is_active: true,
+      show_price: true // ✅ ใส่ให้ครบ
     });
     setDetailImagesArr([]);
     setEditingId(null);
-  };
+};
 
   const getFullImageUrl = (url: string) => {
     if (!url) return '';
@@ -302,10 +317,10 @@ const AdminProductForm: React.FC<{ token: string, onLogout: () => void }> = ({ t
           </div>
         </div>
 
-        {/* Price & Image Upload */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 items-center">
+{/* Price & Image Upload */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 items-end">
           <div>
-            <label className="block text-xs font-bold text-gray-500 mb-1">Price</label>
+            <label className="block text-xs font-bold text-gray-500 mb-1">ราคาเริ่มต้น (Price)</label>
             <input
               type="number"
               value={formData.price}
@@ -314,23 +329,23 @@ const AdminProductForm: React.FC<{ token: string, onLogout: () => void }> = ({ t
             />
           </div>
           <div>
-            <label className="block text-xs font-bold text-gray-500 mb-1">Product Main Image</label>
-            <div className="flex items-center gap-4">
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageUpload}
-                className="w-full px-4 py-2 border border-gray-300 rounded bg-gray-50 cursor-pointer"
-              />
-              {formData.image_url && (
-                <img 
-                  src={getFullImageUrl(formData.image_url)} 
-                  alt="Preview" 
-                  className="w-12 h-12 object-cover rounded shadow border shrink-0"
-                />
-              )}
-            </div>
+            <label className="block text-xs font-bold text-gray-500 mb-1">ราคาขายสูงสุด (Max Price) *ใส่ 0 ถ้าไม่มี</label>
+            <input
+              type="number"
+              value={formData.price_max}
+              onChange={(e) => setFormData({ ...formData, price_max: parseFloat(e.target.value) || 0 })}
+              className="w-full px-4 py-2 border border-gray-300 rounded"
+            />
           </div>
+          <label className="flex items-center gap-2 cursor-pointer pb-2">
+            <input
+              type="checkbox"
+              checked={formData.show_price}
+              onChange={(e) => setFormData({ ...formData, show_price: e.target.checked })}
+              className="w-5 h-5 accent-red-600 cursor-pointer"
+            />
+            <span className="font-bold text-gray-700">แสดงราคาหน้าเว็บ</span>
+          </label>
         </div>
 
         {/* ✅ เพิ่ม UI อัปโหลดรูปภาพ Detail (รองรับ Multiple) */}
@@ -415,7 +430,7 @@ const AdminProductForm: React.FC<{ token: string, onLogout: () => void }> = ({ t
             <thead className="bg-gray-100 border-b border-gray-200">
               <tr>
                 <th className="px-6 py-4 font-black text-gray-600">Image</th>
-                <th className="px-6 py-4 font-black text-gray-600">ชื่อสินค้า (TH)</th> {/* ✅ แก้ตรงนี้ */}
+                <th className="px-6 py-4 font-black text-gray-600">ชื่อสินค้า (TH)</th>
                 <th className="px-6 py-4 font-black text-gray-600">Price</th>
                 <th className="px-6 py-4 font-black text-gray-600">Category</th>
                 <th className="px-6 py-4 font-black text-gray-600 text-center">Status</th>

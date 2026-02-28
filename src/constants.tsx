@@ -13,9 +13,9 @@ export const SITE_CONFIG = {
   },
   home: {
     promotionMain: "/images/promotion.jpg",
-    catalogMockup1: "/images/7/1.jpg",
-    catalogMockup2: "/images/8/1.jpg",
-    dealerBackground: "/images/image_1e7a1c.jpg",
+    catalogMockup1: "/images/mockup1.jpg",
+    catalogMockup2: "/images/mockup2.jpg",
+    dealerBackground: "/images/dealer.jpg",
     logo: "/images/logo.jpg"
   }
 };

@@ -17,6 +17,14 @@ const Product = sequelize.define('Product', {
   description_th: DataTypes.TEXT,
   description_cn: DataTypes.TEXT,
   price: DataTypes.DECIMAL(10, 2),
+  price_max: { // ✅ เพิ่มราคาขายสูงสุด (ถ้าราคาไม่เท่ากันจะแสดงเป็นช่วง)
+    type: DataTypes.DECIMAL(10, 2),
+    defaultValue: 0,
+  },
+  show_price: { // ✅ เพิ่มสวิตช์ปิด/เปิดการโชว์ราคา
+    type: DataTypes.BOOLEAN,
+    defaultValue: true,
+  },
   category_en: DataTypes.STRING,
   category_th: DataTypes.STRING,
   category_cn: DataTypes.STRING,

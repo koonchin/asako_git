@@ -12,13 +12,18 @@ const ContactPopup: React.FC = () => {
 
   // ✅ สร้างตัวแปร contacts จาก config
 // ✅ 1. อัปเดตตัวแปร contacts เพิ่มแผนที่เข้าไป
+  const getCallablePhone = (tel: string) => tel.replace(/\D/g, '').substring(0, tel.startsWith('02') ? 9 : 10);
+
+
+// ✅ 1. อัปเดตตัวแปร contacts เพิ่มแผนที่เข้าไป
   const contacts = [
     { id: 'facebook', label: 'Facebook', link: config.facebook_url, color: 'bg-[#1877F2]' },
     { id: 'line', label: 'Line', link: config.line_url, color: 'bg-[#00C300]' },
-    { id: 'tel', label: config.phone || 'Tel', link: config.phone ? `tel:${config.phone}` : '', color: 'bg-green-600' },
+    // ✅ ใช้ getCallablePhone สำหรับลิงก์
+    { id: 'tel', label: config.phone || 'Tel', link: config.phone ? `tel:${getCallablePhone(config.phone)}` : '', color: 'bg-green-600' },
     { id: 'mail', label: config.email || 'Email', link: config.email ? `mailto:${config.email}` : '', color: 'bg-gray-600' },
-    { id: 'map', label: 'Google Maps', link: config.map_url, color: 'bg-red-500' } // ✅ เพิ่ม Map
-  ].filter(c => c.link); // ซ่อนปุ่มอัตโนมัติถ้าไม่ได้กรอกข้อมูล // ซ่อนอันที่ไม่ได้ใส่ข้อมูล
+    { id: 'map', label: 'Google Maps', link: config.map_url, color: 'bg-red-500' }
+  ].filter(c => c.link); // ซ่อนปุ่มอัตโนมัติถ้าไม่ได้กรอกข้อมูล // ซ่อนปุ่มอัตโนมัติถ้าไม่ได้กรอกข้อมูล // ซ่อนอันที่ไม่ได้ใส่ข้อมูล
 
 // ✅ 2. อัปเดตฟังก์ชันไอคอน
     const renderIcon = (id: string) => {
