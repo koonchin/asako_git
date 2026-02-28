@@ -48,19 +48,25 @@ return (
         <div className="min-h-screen bg-white selection:bg-red-100 selection:text-red-900 flex flex-col">
           <Navbar />
           <div className="flex-grow">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/inventory" element={<ProductGrid />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/services" element={<Services />} />
-              <Route path="/admin" element={<AdminDashboard />} />
-              <Route path="/product/:id" element={<ProductDetail />} /> {/* ✅ เพิ่ม Route นี้ */}
-            </Routes>
+            {/* แสดงเนื้อหาหรือวงล้อหมุนโหลดเฉพาะตรงกลาง */}
+            {loading ? (
+               <div className="flex items-center justify-center py-40">
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600"></div>
+               </div>
+            ) : (
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/inventory" element={<ProductGrid />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/services" element={<Services />} />
+                <Route path="/admin" element={<AdminDashboard />} />
+                <Route path="/product/:id" element={<ProductDetail />} />
+              </Routes>
+            )}
           </div>
           <Footer />
         </div>
       </Router>
     </SiteDataContext.Provider>
   );
-};
 export default App;
