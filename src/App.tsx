@@ -69,4 +69,5 @@ return (
       </Router>
     </SiteDataContext.Provider>
   );
+};
 export default App;
