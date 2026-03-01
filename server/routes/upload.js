@@ -8,8 +8,8 @@ const router = express.Router();
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    // ใช้ path.join โยงจากโฟลเดอร์ routes ถอยกลับมา 1 ขั้นเพื่อเข้าโฟลเดอร์ uploads
-    const uploadDir = process.env.UPLOAD_DIR || path.join(__dirname, '../uploads');
+    // ใช้ __dirname ชี้กลับไปที่โฟลเดอร์ uploads ที่ถูกต้องเสมอ
+    const uploadDir = path.join(__dirname, '../uploads'); 
     if (!require('fs').existsSync(uploadDir)) {
       require('fs').mkdirSync(uploadDir, { recursive: true });
     }
