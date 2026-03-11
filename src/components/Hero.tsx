@@ -51,7 +51,7 @@ const Hero: React.FC = () => {
           <div className="flex-1 w-full relative h-[500px] lg:h-[600px] flex items-center justify-center">
              <div className="relative w-full h-full">
                 <img 
-                  src="https://images.unsplash.com/photo-1530124566582-a618bc2615dc?auto=format&fit=crop&q=80&w=1000" 
+                  src="/images/hero.jpg" 
                   alt="Industrial Machinery" 
                   className="w-full h-full object-cover shadow-2xl rounded-sm grayscale hover:grayscale-0 transition-all duration-1000"
                 />
@@ -73,7 +73,7 @@ const Hero: React.FC = () => {
             {/* ใส่ URL คลิป YouTube ที่นี่แทน (ดึง ID มาใส่ตรง embed/) */}
             <iframe 
               className="w-full h-full" 
-              src="https://www.youtube.com/embed/ScMzIvxBSi4?autoplay=1" 
+              src="https://www.youtube.com/embed/6oKzDUjzmBw?si=DoADqD3lqetDxZSv" 
               title="ASAKO Video" 
               frameBorder="0" 
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 

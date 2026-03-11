@@ -111,7 +111,7 @@ const Home: React.FC = () => {
             <div className="aspect-video bg-black rounded-lg shadow-xl overflow-hidden border-4 border-white">
                <iframe 
                  className="w-full h-full" 
-                 src="https://www.youtube.com/embed/ScMzIvxBSi4" 
+                 src="https://www.youtube.com/embed/6oKzDUjzmBw?si=DoADqD3lqetDxZSv" 
                  title="ASAKO Video" 
                  frameBorder="0" 
                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
