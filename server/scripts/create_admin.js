@@ -25,10 +25,12 @@ const createAdmin = async () => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Insert new admin, or update the password/email if the username exists.
+    // created_at/updated_at are set explicitly because the table (created via
+    // Sequelize) defines them as NOT NULL without a DB-level default.
     await connection.query(
-      `INSERT INTO users (username, password, email, role)
-       VALUES (?, ?, ?, 'admin')
-       ON DUPLICATE KEY UPDATE password = VALUES(password), email = VALUES(email), role = 'admin'`,
+      `INSERT INTO users (username, password, email, role, created_at, updated_at)
+       VALUES (?, ?, ?, 'admin', NOW(), NOW())
+       ON DUPLICATE KEY UPDATE password = VALUES(password), email = VALUES(email), role = 'admin', updated_at = NOW()`,
       [username, hashedPassword, email]
     );
 
